@@ -1,0 +1,11 @@
+{
+    "filter": {
+        "request_type": "illegal"
+    },
+    "content": {
+        "format": "user-defined",
+        "format_string": "status=%request_status%,violations=%violations%,signature_ids=%sig_ids%,support_id=%support_id%",
+        "max_request_size": 2000,
+        "max_message_size": "5k"
+    }
+}

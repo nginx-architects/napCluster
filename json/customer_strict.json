@@ -1,0 +1,65 @@
+{
+    "policy": {
+      "name": "customer_strictpolicy",
+      "template": {
+        "name": "POLICY_TEMPLATE_NGINX_BASE"
+      },
+      "applicationLanguage": "utf-8",
+      "enforcementMode": "blocking",
+    "general": {
+        "customXffHeaders": [],
+        "trustXff": true
+    },
+      "signature-sets": [
+        {
+          "name": "High Accuracy Signatures",
+          "alarm": true,
+          "block": true
+        },
+        {
+          "name": "Command Execution Signatures",
+          "alarm": true,
+          "block": true
+        },
+        {
+          "name": "SQL Injection Signatures",
+          "alarm": true,
+          "block": true
+        },
+        {
+          "name": "Server Side Code Injection Signatures",
+          "alarm": true,
+          "block": true
+        },
+        {
+          "name": "Cross Site Scripting Signatures",
+          "alarm": true,
+          "block": true
+        },
+        {
+          "name": "Generic Detection Signatures (High Accuracy)",
+          "alarm": true,
+          "block": true
+        },
+        {
+          "name": "Generic Detection Signatures (High/Medium Accuracy)",
+          "alarm": true
+        },
+        {
+          "name": "Medium Accuracy Signatures",
+          "alarm": true
+        },
+        {
+          "name": "Predictable Resource Location Signatures",
+          "alarm": true
+        }
+      ],
+      "urls": [
+        {
+          "name": "/files",
+          "wildcardOrder": 0,
+          "attackSignaturesCheck": false
+        }
+      ]
+    }
+  }
