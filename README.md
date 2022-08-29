@@ -9,7 +9,6 @@ Zone Synchronization allows three types of state data to be kept in sync within 
 In this demo, we will sync three rate limits and one key-value across the cluster.
 
 ## Demo Use Case
----
 ![NGINX Cluster](cluster.png)
 As shown in the above diagram, NGINX App Protect WAF is protecting a pool of application servers. There is a load balancer in front spraying traffic across the WAF nodes.
 
@@ -25,7 +24,6 @@ In this scenario, however, we want multiple nodes to behave like a single node. 
 
 We achieve this by joining the NGINX App Protect nodes into a cluster. If a change is made to the key-value store on one node the change is automatically propogated to all the other nodes so they stay in sync. Request volume is also shared so when a rate limit is reached on one node it automatically is triggered on all nodes of the cluster.
 ## Demo Environment
----
 ![NGINX Cluster](docker-services.png)
 We will construct our demo environment as three services deployed by `docker-compose up`:
 1. The `lb` service provides the load balancer that sprays traffic across the NGINX cluster
@@ -47,7 +45,6 @@ The `lb.conf` and `nap.conf` files contain the `nginx.conf` for the **lb** and *
 
 The `json` directory contains security policy and logging config files for NGINX App Protect. *These files can also be edited directly on the Docker host.*
 ## Demo Walkthrough
----
 1. Clone this repo to your local Docker host.
 
 2. Copy your NGINX Plus `nginx-repo.*` files to the `lb` directory
@@ -100,8 +97,7 @@ lb_1    | 192.168.1.38 - request="GET http://dmz/?<script>"
 
 13. To test rate limits, quickly click the refresh button on the browser multiple times until the message "503 Request Temporarily Unavailable" appears. Inspecting the logs will show that the rate limit was hit on both the **nap_1** and **nap_2** nodes.
 
-##NGINX Plus Dashboard
----
+## NGINX Plus Dashboard
 Each **nap** instance has a realtime monitoring dashboard enabled. To access the dashboard, use the following URLs: (Replace *docker-host* below with the IP or hostname of your Docker host)
 
 - Dashboard on **nap_1**: http://*docker-host*:81/dashboard.html
@@ -115,8 +111,7 @@ After the dashboard appears, click on "HTTP Zones" and notice there are three ty
 
 Click on "Cluster" to see the status of the cluster. There are four zones being synchronized, the IP address key-value store and the three rate limits.  The record counts will increase on all nodes when more entries are added to the key-value store or more clients connect to the each of rate limits. The "Nodes online" metric shows how many other nodes are in this cluster not including itself.
 
-##Scaling the cluster
----
+## Scaling the cluster
 You can change the number of nodes in the cluster (or the app server pool) using the following command: 
 
 ```console
