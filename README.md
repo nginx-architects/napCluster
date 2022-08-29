@@ -1,4 +1,6 @@
 # NGINX Plus Cluster for NAP
+[YouTube recording of this demo](https://youtu.be/7C9v0LQAPs0)
+
 This demo leverages the scaling capability of *Docker Compose* to show how the [Zone Synchronization](https://docs.nginx.com/nginx/admin-guide/high-availability/zone_sync_details/) feature of *NGINX Plus* allows nodes to form a cluster and share runtime state information in realtime.
 
 Zone Synchronization allows three types of state data to be kept in sync within a cluster:
