@@ -1,0 +1,8 @@
+# syntax=docker/dockerfile:1
+# For Ubuntu 18.04:
+FROM nap
+
+# Copy configuration files:
+COPY aws.conf /etc/nginx/nginx.conf
+COPY quota.js /etc/nginx/
+COPY json/ /etc/nginx/json/
