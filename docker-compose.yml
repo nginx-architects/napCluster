@@ -17,6 +17,7 @@ services:
     scale: 2
     volumes:
       - ./nap.conf:/etc/nginx/nginx.conf:ro
+      - ./quota.js:/etc/nginx/quota.js:ro
       - ./json:/etc/nginx/json:ro
   pool:
     image: nginxdemos/hello:plain-text

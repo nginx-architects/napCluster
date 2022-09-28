@@ -1,6 +1,7 @@
 function checkQuota(r) {
     if (!r.variables.counter) {
         r.error("NEW COUNTER");
+	r.variables.backend = r.variables.server_addr;
         r.return(204);
     } else if (r.variables.counter < r.variables.quota) {
         r.error("QUOTA PASS");
