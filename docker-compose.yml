@@ -6,7 +6,7 @@ services:
     hostname: lb
     ports:
       - "80:80"
-      - "81:81"
+      - "83:81"
       - "82:82"
     volumes:
       - ./lb.conf:/etc/nginx/nginx.conf:ro

@@ -26,7 +26,7 @@ In this scenario, however, we want multiple nodes to behave like a single node. 
 
 We achieve this by joining the NGINX App Protect nodes into a cluster. If a change is made to the key-value store on one node the change is automatically propogated to all the other nodes so they stay in sync. Request volume is also shared so when a rate limit is reached on one node it automatically is triggered on all nodes of the cluster.
 ## Demo Environment
-![NGINX Cluster](docker-services.png)
+![NGINX Cluster](diagram.png)
 We will construct our demo environment as three services deployed by `docker-compose up`:
 1. The `lb` service provides the load balancer that sprays traffic across the NGINX cluster
 2. The `nap` service provides the NGINX App Protect (NAP) cluster itself
