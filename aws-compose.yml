@@ -1,0 +1,24 @@
+version: '3.3'
+services:
+  nap:
+    image: 664341837355.dkr.ecr.us-east-1.amazonaws.com/nap:latest
+    ports:
+      - "80:80"
+    deploy:
+      replicas: 2
+  pool:
+    image: nginxdemos/hello:plain-text
+    deploy:
+      replicas: 2
+x-aws-cloudformation:
+  Resources:
+    NapTaskDefinition:
+      Properties:
+        Cpu: "2048"
+        Memory: "4096"
+    NapTCP80TargetGroup:
+      Properties:
+        HealthCheckPath: /health
+        Matcher:
+          HttpCode: 200-499
+

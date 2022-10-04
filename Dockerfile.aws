@@ -3,6 +3,6 @@
 FROM nap
 
 # Copy configuration files:
-COPY aws.conf /etc/nginx/nginx.conf
+COPY policies/ /etc/nginx/json/
 COPY quota.js /etc/nginx/
-COPY json/ /etc/nginx/json/
+COPY aws.conf /etc/nginx/nginx.conf

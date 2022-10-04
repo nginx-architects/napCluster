@@ -2,23 +2,27 @@ version: '3.3'
 services:
   lb:
     image: lb
-    build: ./lb
-    hostname: lb
+    build:
+      context: .
+      dockerfile: Dockerfile.lb
     ports:
       - "80:80"
-      - "81:81"
       - "82:82"
     volumes:
       - ./lb.conf:/etc/nginx/nginx.conf:ro
   nap:
     image: nap
-    build: ./nap
-    hostname: nap
-    scale: 2
+    build:
+      context: .
+      dockerfile: Dockerfile.nap
+    deploy:
+      replicas: 2
     volumes:
       - ./nap.conf:/etc/nginx/nginx.conf:ro
       - ./quota.js:/etc/nginx/quota.js:ro
-      - ./json:/etc/nginx/json:ro
+      - ./policies:/etc/nginx/json:ro
   pool:
     image: nginxdemos/hello:plain-text
-    scale: 2
+    deploy:
+      replicas: 2
+

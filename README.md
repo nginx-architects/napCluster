@@ -45,7 +45,7 @@ Three ports are mapped on the Docker host to the "**lb**" container:
 
 The `lb.conf` and `nap.conf` files contain the `nginx.conf` for the **lb** and **nap** containers.  *You can edit these files directly on the Docker host as they are bind mounted into each container.*
 
-The `json` directory contains security policy and logging config files for NGINX App Protect. *These files can also be edited directly on the Docker host.*
+The `policies` directory contains security policy and logging config files for NGINX App Protect. *These files can also be edited directly on the Docker host.*
 ## Demo Walkthrough
 1. Clone this repo to your local Docker host.
 
