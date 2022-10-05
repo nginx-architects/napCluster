@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   nap:
-    image: 664341837355.dkr.ecr.us-east-1.amazonaws.com/nap:latest
+    image: <YOUR PRIVATE REGISTRY>/nap:latest
     ports:
       - "80:80"
     deploy:
