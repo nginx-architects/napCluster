@@ -1,14 +1,14 @@
 # NGINX Plus Cluster for NAP
 [YouTube recording of this demo](https://youtu.be/7C9v0LQAPs0)
 
-This demo leverages the scaling capability of *Docker Compose* to show how the [Zone Synchronization](https://docs.nginx.com/nginx/admin-guide/high-availability/zone_sync_details/) feature of *NGINX Plus* allows nodes to form a cluster and share runtime state information in realtime.
+This demo leverages the scaling capability of *Docker Compose* (both locally and in *AWS Fargate*) to show how the [Zone Synchronization](https://docs.nginx.com/nginx/admin-guide/high-availability/zone_sync_details/) feature of *NGINX Plus* allows nodes to form a cluster and share runtime state information in realtime.
 
 Zone Synchronization allows three types of state data to be kept in sync within a cluster:
 1. Session Persistence
 2. Rate Limits
 3. Key-Value Stores
 
-In this demo, we will sync three rate limits and one key-value across the cluster.
+In this demo, we will sync three rate limits and one key-value across the cluster. We will also use NGINX Javascript to implement "request counting" and enforce a quota on usage. The current request count for a particular client IP address, HTTP method, and URI is also synced across the cluster.
 
 ## Demo Use Case
 ![NGINX Cluster](cluster.png)
@@ -19,6 +19,8 @@ NGINX App Protect is enforcing three security policies (and rate limits): *stric
 We choose the policy (and rate limit) to use based on the "user agent" of the client.  Clients using Chrome are assigned the "strict" policy, Safari clients get the "medium" policy, and everyone else ends up with "default."
 
 We can override the security policy chosen by using an IP address lookup table stored as an NGINX Plus key-value store. The key is the IP address or CIDR of the client. The value is the security policy to use regardless of user agent.
+
+For the medium policy, we also maintain a counter for each combination of a particular client IP address, HTTP method, and URI. A quota is enforced to only allow 5 requests in a 5 minute window.
 
 Normally, NGINX nodes run standalone from each other. An single NGINX configuration can be cloned multiple times for horizontal scalability without conflicting with one another.
 
