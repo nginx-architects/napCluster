@@ -101,7 +101,7 @@ lb_1    | 192.168.1.38 - request="GET http://dmz/?<script>"
 14. To test rate limits, quickly click the refresh button on the browser multiple times until the message "503 Request Temporarily Unavailable" appears. Inspecting the logs will show that the rate limit was hit on both the **nap_1** and **nap_2** nodes.
 
 15. For requests that are assigned the medium policy, notice the request counter in the logs:
-```console
+```c
 nap_1   | 2022/10/05 15:47:56 [error] 39#39: *9 js: NEW COUNTER
 nap_1   | 2022/10/05 15:47:56 [error] 39#39: *12 js: CREATING
 nap_1   | 2022/10/05 15:47:56 [error] 39#39: *12 js: COUNTER = 1
