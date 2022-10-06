@@ -128,28 +128,28 @@ Now, follow these instructions to connect Docker to AWS and deploy the demo to A
 
 1. Create a docker context for AWS and switch to it
 ```console
-docker context create ecs aws
-docker context use aws
+$ docker context create ecs aws
+$ docker context use aws
 ```
 2. Authenticate to Amazon's *Elastic Container Registry* and create a new private repo
 ```console
-aws ecr get-login-password | docker login --username AWS --password-stdin <your ECR>.dkr.ecr.us-east-1.amazonaws.com
-aws ecr create-repository --repository-name nap
+$ aws ecr get-login-password | docker login --username AWS --password-stdin <your ECR>.dkr.ecr.us-east-1.amazonaws.com
+$ aws ecr create-repository --repository-name nap
 ```
 3. Build an AWS ready image using the provided Dockerfile and push it to ECR
 ```console
-docker build -f Dockerfile.aws -t <your ECR>.dkr.ecr.us-east-1.amazonaws.com/nap:latest .
-docker push <your ECR>.dkr.ecr.us-east-1.amazonaws.com/nap:latest
+$ docker build -f Dockerfile.aws -t <your ECR>.dkr.ecr.us-east-1.amazonaws.com/nap:latest .
+$ docker push <your ECR>.dkr.ecr.us-east-1.amazonaws.com/nap:latest
 ```
 4. Use the "compose" option to the `docker` CLI (not `docker-compose`) to create the demo in Fargate
 ```console
-docker compose --file aws-compose.yml up
+$ docker compose --file aws-compose.yml up
 ```
 5. Inspect the containers started in Fargate and use the FQDN provided to access NGINX remotely
 ```console
-docker compose ps
+$ docker compose ps
 ```
 6. Shutdown the demo when you finish to stop AWS usage charges
 ```console
-docker compose down
+$ docker compose down
 ```
