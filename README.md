@@ -32,14 +32,13 @@ We will construct our demo environment as three services deployed by `docker-com
 2. The `nap` service provides the NGINX App Protect (NAP) cluster itself
 3. The `pool` service provides the application servers
 
-Two Docker images are created: The first, named "**lb**", uses the `Dockerfile` in the `lb` directory to install NGINX Plus into a container to be used as a simple L7 load balancer.  The second, named "**nap**", uses the `Dockerfile` in the `nap` directory to extend the "**lb**" image with additional layers for NGINX App Protect installation and configuration. A simple [hello container from Docker Hub](https://hub.docker.com/r/nginxdemos/hello) is used for the "**pool**" app server tier.
+Two Docker images are created: The first, named "**lb**", uses `Dockerfile.lb` to install NGINX Plus into a container to be used as a simple L7 load balancer.  The second, named "**nap**", uses `Dockerfile.nap` to extend the "**lb**" image with additional layers for NGINX App Protect installation and configuration. A simple [hello container from Docker Hub](https://hub.docker.com/r/nginxdemos/hello) is used for the "**pool**" app server tier.
 
 When launched, Docker Compose will start one `lb`, two `nap`, and two `pool` containers. You can increase and decrease the number of `nap` and `pool` nodes using `docker-compose scale`. The number of `lb` nodes must stay at one since ports are mapped to this container.
 
 Three ports are mapped on the Docker host to the "**lb**" container:
 1. Connections on port 80 are sprayed round robin across all `nap` nodes
-2. Connections on port 81 are proxied directly to `nap_1`
-3. Connections on port 82 are proxied directly to `nap_2`
+2. Connections on port 82 are proxied directly to `nap_1`
 
 *Edit the `docker-compose.yml` file to change these ports if needed*
 
@@ -49,7 +48,7 @@ The `policies` directory contains security policy and logging config files for N
 ## Demo Walkthrough
 1. Clone this repo to your local Docker host.
 
-2. Copy your NGINX Plus `nginx-repo.*` files to the `lb` directory
+2. Copy your NGINX Plus `nginx-repo.*` files to the `napCluster` directory where you cloned this repo.
 
 2. Start up the demo using `docker-compose up` *Starting the demo for the first time will also build the "**lb**" and "**nap**" Docker containers.*
 
@@ -100,10 +99,9 @@ lb_1    | 192.168.1.38 - request="GET http://dmz/?<script>"
 13. To test rate limits, quickly click the refresh button on the browser multiple times until the message "503 Request Temporarily Unavailable" appears. Inspecting the logs will show that the rate limit was hit on both the **nap_1** and **nap_2** nodes.
 
 ## NGINX Plus Dashboard
-Each **nap** instance has a realtime monitoring dashboard enabled. To access the dashboard, use the following URLs: (Replace *docker-host* below with the IP or hostname of your Docker host)
+Each **nap** instance has a realtime monitoring dashboard enabled. To access the dashboard, use the following URL: (Replace *docker-host* below with the IP or hostname of your Docker host)
 
-- Dashboard on **nap_1**: http://*docker-host*:81/dashboard.html
-- Dashboard on **nap_2**: http://*docker-host*:82/dashboard.html
+- Dashboard on **nap_1**: http://*docker-host*:82/dashboard.html
 
 After the dashboard appears, click on "HTTP Zones" and notice there are three types of counters:
 
@@ -119,4 +117,39 @@ You can change the number of nodes in the cluster (or the app server pool) using
 ```console
 $ docker-compose scale nap=3
 Creating napcluster_nap_3 ... done
+```
+
+## Running in AWS Fargate
+Docker Compose can also deploy this environment to AWS. To do this you will need the version of the `docker` CLI with "Cloud Integration." (Run the `docker version` command and look for "Cloud Integration" in the output.) The `docker` CLI included with Docker Desktop on Mac and Windows includes this integration. For Linux, follow these instructions to [Install the Docker Compose CLI on Linux](https://docs.docker.com/cloud/aci-integration/#install-the-docker-compose-cli-on-linux).
+
+Next, you will need the AWS CLI installed on your Docker host and configured to access your AWS account. [Click here for instructions](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+
+Now, follow these instructions to connect Docker to AWS and deploy the demo to AWS Fargate:
+
+1. Create a docker context for AWS and switch to it
+```console
+docker context create ecs aws
+docker context use aws
+```
+2. Authenticate to Amazon's *Elastic Container Registry* and create a new private repo
+```console
+aws ecr get-login-password | docker login --username AWS --password-stdin <your ECR>.dkr.ecr.us-east-1.amazonaws.com
+aws ecr create-repository --repository-name nap
+```
+3. Build an AWS ready image using the provided Dockerfile and push it to ECR
+```console
+docker build -f Dockerfile.aws -t <your ECR>.dkr.ecr.us-east-1.amazonaws.com/nap:latest .
+docker push <your ECR>.dkr.ecr.us-east-1.amazonaws.com/nap:latest
+```
+4. Use the "compose" option to the `docker` CLI (not `docker-compose`) to create the demo in Fargate
+```console
+docker compose --file aws-compose.yml up
+```
+5. Inspect the containers started in Fargate and use the FQDN provided to access NGINX remotely
+```console
+docker compose ps
+```
+6. Shutdown the demo when you finish to stop AWS usage charges
+```console
+docker compose down
 ```
