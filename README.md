@@ -155,6 +155,27 @@ $ docker push <your ECR>.dkr.ecr.us-east-1.amazonaws.com/nap:latest
 4. Use the "compose" option to the `docker` CLI (not `docker-compose`) to create the demo in Fargate
 ```console
 $ docker compose --file aws-compose.yml up
+WARNING services.scale: unsupported attribute        
+WARNING services.scale: unsupported attribute        
+[+] Running 18/18
+ ⠿ napcluster                 CreateComplete                                                                           255.1s
+ ⠿ NapTCP80TargetGroup        CreateComplete                                                                             1.1s
+ ⠿ Cluster                    CreateComplete                                                                             5.0s
+ ⠿ CloudMap                   CreateComplete                                                                            47.0s
+ ⠿ DefaultNetwork             CreateComplete                                                                             6.0s
+ ⠿ NapTaskExecutionRole       CreateComplete                                                                            19.0s
+ ⠿ PoolTaskExecutionRole      CreateComplete                                                                            19.0s
+ ⠿ LogGroup                   CreateComplete                                                                             3.0s
+ ⠿ LoadBalancer               CreateComplete                                                                           123.2s
+ ⠿ Default80Ingress           CreateComplete                                                                             1.0s
+ ⠿ DefaultNetworkIngress      CreateComplete                                                                             2.0s
+ ⠿ PoolTaskDefinition         CreateComplete                                                                             4.1s
+ ⠿ NapTaskDefinition          CreateComplete                                                                             5.1s
+ ⠿ NapServiceDiscoveryEntry   CreateComplete                                                                             3.0s
+ ⠿ PoolServiceDiscoveryEntry  CreateComplete                                                                             2.0s
+ ⠿ PoolService                CreateComplete                                                                            78.1s
+ ⠿ NapTCP80Listener           CreateComplete                                                                             2.9s
+ ⠿ NapService                 CreateComplete                                                                           108.9s
 ```
 5. Inspect the containers started in Fargate and use the FQDN provided to access NGINX remotely
 ```console
